@@ -3,3 +3,6 @@ u:
 
 d:
 	docker-compose down
+
+rmi:
+	docker rmi chien/cart-nest chien/cart-pg

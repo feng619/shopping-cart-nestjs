@@ -24,7 +24,7 @@ describe('User e2e-spec', () => {
         testOrder: Order,
         testOrderId: string
     let app: INestApplication
-    let server
+    let server: any
 
     beforeAll(async () => {
         const module = await Test.createTestingModule({

@@ -1,5 +1,5 @@
 
-> This is my side project with the aim of practicing jest.js and typeORM.
+> This is my side project with the aim of practicing jest.js and typeORM.  
 > All suggestions are welcome. Thank you so much.
 
 ##### &nbsp;
@@ -18,7 +18,7 @@ check if the containers are running correctly
 $ docker ps -a
 ```
 
-then you can try the curl examples listed below
+then you can try the curl examples listed below  
 for example, sign up and log in:
 
 ```sh
@@ -31,6 +31,12 @@ stop the service
 
 ```sh
 $ make d
+```
+
+finally, delete the images you just created
+
+```sh
+$ make rmi
 ```
 
 ##### &nbsp;
