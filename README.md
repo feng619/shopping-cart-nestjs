@@ -6,32 +6,37 @@
 
 # **Quick Start**
 
-start a postgres instance
+start the service
 
 ```sh
-$ cd postgres
-$ make r
-
-// wait for a second, then
-$ make i
+$ make u
 ```
 
-install all dependencies
+check if the containers are running correctly
 
 ```sh
-$ cd server
-$ npm i
+$ docker ps -a
 ```
 
-then you can start node.js devlopment
+then you can try the curl examples listed below
+for example, sign up and log in:
 
 ```sh
-$ npm run start:dev
+$ curl -XPOST "localhost:3000/user" -H "Content-Type:application/json" -d '{"user_name":"chien","account":"abc@gmail.com","password":"123456","credit":100}'
+
+$ curl -XPUT "localhost:3000/user/login" -H "Content-Type:application/json" -d '{"account":"abc@gmail.com","password":"123456"}'
+```
+
+stop the service
+
+```sh
+$ make d
 ```
 
 ##### &nbsp;
 
 # **Schema "public"**
+
 ### Table "public.item_entity"
 
 ```
@@ -142,14 +147,14 @@ sign up
 ```sh
 $ curl -XPOST "localhost:3000/user" -H "Content-Type:application/json" -d '{"user_name":"chien","account":"abc@gmail.com","password":"123456","credit":100}'
 
-$	curl -XPOST "localhost:3000/user" -H "Content-Type:application/json" -d '{"user_name":"pipi","account":"123@gmail.com","password":"asdzxc","credit":100}'
+$ curl -XPOST "localhost:3000/user" -H "Content-Type:application/json" -d '{"user_name":"eric","account":"123@gmail.com","password":"asdzxc","credit":100}'
 ```
 
 log in
 ```sh
 $ curl -XPUT "localhost:3000/user/login" -H "Content-Type:application/json" -d '{"account":"abc@gmail.com","password":"123456"}'
 
-$	curl -XPUT "localhost:3000/user/login" -H "Content-Type:application/json" -d '{"account":"123@gmail.com","password":"asdzxc"}'
+$ curl -XPUT "localhost:3000/user/login" -H "Content-Type:application/json" -d '{"account":"123@gmail.com","password":"asdzxc"}'
 ```
 
 deposit
@@ -179,4 +184,3 @@ get all orders
 ```sh
 $ curl -XGET "localhost:3000/order"
 ```
-

@@ -1,0 +1,26 @@
+version: "3"
+services:
+  api:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    image: chien/cart-nest:latest
+    container_name: cart-api   
+    ports:
+      - 3000:3000
+    depends_on:
+      - postgres
+    environment:
+      - CART_DB_HOST=cart-pg
+
+  postgres:
+    build:
+      context: ./postgres
+      dockerfile: Dockerfile
+    image: chien/cart-pg:latest
+    container_name: cart-pg
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_PASSWORD=pw

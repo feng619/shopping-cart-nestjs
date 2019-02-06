@@ -9,7 +9,7 @@ export const dbProvider = {
     useFactory: async () =>
         await createConnection({
             type: 'postgres',
-            host: '0.0.0.0',
+            host: process.env.CART_DB_HOST,
             port: 5432,
             username: 'postgres',
             password: 'pw',
