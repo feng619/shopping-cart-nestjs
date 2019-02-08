@@ -107,6 +107,8 @@ Referenced by:
 get all items
 ```
 GET /item
+
+success 200
 [
     {
         item_id,
@@ -115,8 +117,6 @@ GET /item
         items_in_stock
     }
 ]
-
-success 200
 ```
 
 get an item
@@ -168,6 +168,8 @@ success 200
 get all users
 ```
 GET /user
+
+success 200
 [
     {
         user_id,
@@ -180,8 +182,6 @@ GET /user
         last_login_time
     }
 ]
-
-success 200
 ```
 
 get a user
@@ -330,14 +330,14 @@ GET /order
 success 200
 [
     {
-        "order_id",
-        "order_details": [
+        order_id,
+        order_details: [
             {
-                "amount",
-                "item_id"
+                amount,
+                item_id
             }
         ],
-        "created_time"
+        created_time
     }
 ]
 ```
