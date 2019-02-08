@@ -2,6 +2,7 @@
 > This is my side project with the aim of practicing jest.js and typeORM.  
 > All suggestions are welcome. Thank you so much.
 
+
 ##### &nbsp;
 
 # **Quick Start**
@@ -38,6 +39,7 @@ finally, delete the images you just created
 ```sh
 $ make rmi
 ```
+
 
 ##### &nbsp;
 
@@ -95,6 +97,252 @@ Referenced by:
     TABLE "order_entity" CONSTRAINT "FK_6aafe1b4b31910c604f13cd232e" FOREIGN KEY ("userUserId") REFERENCES user_entity(user_id)
 ```
 
+
+##### &nbsp;
+
+# **API List**
+
+### item
+
+get all items
+```
+GET /item
+[
+    {
+        item_id,
+        item_name,
+        price,
+        items_in_stock
+    }
+]
+
+success 200
+```
+
+get an item
+```
+GET /item/{item_id}
+
+success 200
+{
+    item_name,
+    price,
+    items_in_stock
+}
+```
+
+create an item
+```
+POST /item
+{
+    item_name,
+    price,
+    items_in_stock
+}
+
+success 201
+```
+
+modify an item
+```
+PUT /item
+{
+    item_id,
+    price,
+    items_in_stock
+}
+
+success 200
+```
+
+delete an item
+```
+DELETE /item/{item_id}
+
+success 200
+```
+
+
+## user
+
+get all users
+```
+GET /user
+[
+    {
+        user_id,
+        user_name,
+        account,
+        password,
+        credit,
+        cart,
+        created_time,
+        last_login_time
+    }
+]
+
+success 200
+```
+
+get a user
+```
+GET /user/{user_id}
+
+success 200
+{
+    account,
+    user_name,
+    credit,
+    created_time,
+    last_login_time
+}
+```
+
+get the order list of a user
+```
+GET /user/{user_id}/orderlist
+
+success 200
+{
+    account,
+    name,
+    order_list: [
+        {
+            order_id,
+            item_list: [
+                {
+                    item_id,
+                    item_name,
+                    item_price,
+                    amount,
+                    subtotal
+                }
+            ],
+            created_time,
+            total
+        }
+    ]
+}
+```
+
+get the shopping cart of a user
+```
+GET /user/{user_id}/cart
+
+success 200
+{
+    total,
+    item_list: [
+        {
+            item_id,
+            item_name,
+            item_price,
+            amount,
+            subtotal
+        }
+    ]
+}
+```
+
+sign up
+```
+POST /user
+{
+    user_name,
+    account,
+    password,
+    credit
+}
+
+success 201
+```
+
+log in
+```
+POST /user
+{
+    account,
+    password
+}
+
+success 200
+{
+    user_id,
+    user_name
+}
+```
+
+deposit
+```
+PUT user/deposit
+{
+    user_id,
+    amount
+}
+
+success 200
+{
+    user_id,
+    user_name
+}
+```
+
+add to shopping cart
+```
+PUT /user/additem
+{
+    user_id,
+    item_id,
+    amount
+}
+
+success 200
+```
+
+remove from shopping cart
+```
+PUT /user/removeitem
+{
+    user_id,
+    item_id
+}
+
+success 200
+```
+
+checkout
+```
+PUT /user/checkout
+{
+    user_id
+}
+
+success 200
+```
+
+
+## order
+
+get all orders
+```
+GET /order
+
+success 200
+[
+    {
+        "order_id",
+        "order_details": [
+            {
+                "amount",
+                "item_id"
+            }
+        ],
+        "created_time"
+    }
+]
+```
+
+
 ##### &nbsp;
 
 # **Curl Examples**
@@ -108,7 +356,7 @@ $ curl -XGET "localhost:3000/item"
 
 get an item
 ```sh
-$ curl -XGET "localhost:3000/item/a203c201-afa2-45a8-8ce7-855ff96e5187"
+$ curl -XGET "localhost:3000/item/f41e69f2-3958-4ca4-be09-7e8058c15036"
 ```
 
 create an item
@@ -118,12 +366,12 @@ $ curl -XPOST "localhost:3000/item" -H "Content-Type:application/json" -d '{"ite
 
 modify an item
 ```sh
-$ curl -XPUT "localhost:3000/item" -H "Content-Type:application/json" -d '{"item_id":"a203c201-afa2-45a8-8ce7-855ff96e5187","price":15,"items_in_stock":1000}'
+$ curl -XPUT "localhost:3000/item" -H "Content-Type:application/json" -d '{"item_id":"f41e69f2-3958-4ca4-be09-7e8058c15036","price":15,"items_in_stock":1000}'
 ```
 
 delete an item
 ```sh
-$ curl -XDELETE "localhost:3000/item/a203c201-afa2-45a8-8ce7-855ff96e5187"
+$ curl -XDELETE "localhost:3000/item/f41e69f2-3958-4ca4-be09-7e8058c15036"
 ```
 
 
@@ -136,51 +384,47 @@ $ curl -XGET "localhost:3000/user"
 
 get a user
 ```sh
-$ curl -XGET "localhost:3000/user/cd5ff24e-e57e-4dea-acb1-d0103e08c0ad"
+$ curl -XGET "localhost:3000/user/85a73471-807a-42ad-8020-3094435574f6"
 ```
 
 get the order list of a user
 ```sh
-$ curl -XGET "localhost:3000/user/cd5ff24e-e57e-4dea-acb1-d0103e08c0ad/orderlist"
+$ curl -XGET "localhost:3000/user/85a73471-807a-42ad-8020-3094435574f6/orderlist"
 ```
 
 get the shopping cart of a user
 ```sh
-$ curl -XGET "localhost:3000/user/cd5ff24e-e57e-4dea-acb1-d0103e08c0ad/cart"
+$ curl -XGET "localhost:3000/user/85a73471-807a-42ad-8020-3094435574f6/cart"
 ```
 
 sign up
 ```sh
 $ curl -XPOST "localhost:3000/user" -H "Content-Type:application/json" -d '{"user_name":"chien","account":"abc@gmail.com","password":"123456","credit":100}'
-
-$ curl -XPOST "localhost:3000/user" -H "Content-Type:application/json" -d '{"user_name":"eric","account":"123@gmail.com","password":"asdzxc","credit":100}'
 ```
 
 log in
 ```sh
 $ curl -XPUT "localhost:3000/user/login" -H "Content-Type:application/json" -d '{"account":"abc@gmail.com","password":"123456"}'
-
-$ curl -XPUT "localhost:3000/user/login" -H "Content-Type:application/json" -d '{"account":"123@gmail.com","password":"asdzxc"}'
 ```
 
 deposit
 ```sh
-$ curl -XPUT "localhost:3000/user/deposit" -H "Content-Type:application/json" -d '{"user_id":"cd5ff24e-e57e-4dea-acb1-d0103e08c0ad","amount":50}'
+$ curl -XPUT "localhost:3000/user/deposit" -H "Content-Type:application/json" -d '{"user_id":"85a73471-807a-42ad-8020-3094435574f6","amount":50}'
 ```
 
 add to shopping cart
 ```sh
-$ curl -XPUT "localhost:3000/user/additem" -H "Content-Type:application/json" -d '{"user_id":"cd5ff24e-e57e-4dea-acb1-d0103e08c0ad","item_id":"a203c201-afa2-45a8-8ce7-855ff96e5187","amount":1}'
+$ curl -XPUT "localhost:3000/user/additem" -H "Content-Type:application/json" -d '{"user_id":"85a73471-807a-42ad-8020-3094435574f6","item_id":"f41e69f2-3958-4ca4-be09-7e8058c15036","amount":1}'
 ```
 
 remove from shopping cart
 ```sh
-$ curl -XPUT "localhost:3000/user/removeitem" -H "Content-Type:application/json" -d '{"user_id":"cd5ff24e-e57e-4dea-acb1-d0103e08c0ad","item_id":"a203c201-afa2-45a8-8ce7-855ff96e5187"}'
+$ curl -XPUT "localhost:3000/user/removeitem" -H "Content-Type:application/json" -d '{"user_id":"85a73471-807a-42ad-8020-3094435574f6","item_id":"f41e69f2-3958-4ca4-be09-7e8058c15036"}'
 ```
 
 checkout
 ```sh
-$ curl -XPUT "localhost:3000/user/checkout" -H "Content-Type:application/json" -d '{"user_id":"cd5ff24e-e57e-4dea-acb1-d0103e08c0ad"}'
+$ curl -XPUT "localhost:3000/user/checkout" -H "Content-Type:application/json" -d '{"user_id":"85a73471-807a-42ad-8020-3094435574f6"}'
 ```
 
 
