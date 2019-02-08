@@ -434,3 +434,38 @@ get all orders
 ```sh
 $ curl -XGET "localhost:3000/order"
 ```
+
+
+##### &nbsp;
+
+# **Tests**
+
+start a postgres instance
+
+```sh
+$ cd postgres
+$ make r
+
+# wait for a second, then
+$ make i
+```
+
+install all dependencies
+
+```sh
+$ cd ../server
+$ npm i
+```
+
+run the tests
+
+```sh
+$ npm run test-e2e
+```
+
+remove the postgres instance
+
+```sh
+$ cd ../postgres
+$ make rm
+```
