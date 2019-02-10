@@ -297,6 +297,7 @@ PUT /user/additem
 }
 
 success 200
+failure 409
 ```
 
 remove from shopping cart
@@ -308,6 +309,7 @@ PUT /user/removeitem
 }
 
 success 200
+failure 409
 ```
 
 checkout

@@ -26,7 +26,9 @@ export class OrderService {
                 throw new BadRequestException('訂單不存在')
             }
 
-            return await this.orderRepository.remove(order)
+            await this.orderRepository.remove(order)
+
+            return
         } catch (err) {
             return err
         }

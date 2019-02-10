@@ -3,8 +3,9 @@ import {
     Inject,
     BadRequestException,
     UnauthorizedException,
+    ConflictException,
 } from '@nestjs/common'
-import { Repository } from 'typeorm'
+import { Repository, Transaction, TransactionRepository } from 'typeorm'
 import * as uuidv4 from 'uuid/v4'
 import * as _ from 'lodash'
 import * as bcrypt from 'bcrypt'
@@ -20,6 +21,7 @@ import {
 } from './user.interface'
 import { Item } from '../items/item.interface'
 import { Order } from '../orders/order.interface'
+import { ItemEntity } from '../entity/item.entity'
 import { UserEntity } from '../entity/user.entity'
 import { OrderEntity } from '../entity/order.entity'
 import {
@@ -239,11 +241,16 @@ export class UserService {
         }
     }
 
-    async addItem(param: UserAddItemDto) {
+    @Transaction({ isolation: 'SERIALIZABLE' })
+    async addItem(
+        param: UserAddItemDto,
+        @TransactionRepository(UserEntity) userRepository?: Repository<User>,
+        @TransactionRepository(ItemEntity) itemRepository?: Repository<Item>
+    ) {
         try {
             const { user_id, item_id, amount } = param
-            const user = await this.userRepository.findOne({ user_id })
-            const item = await this.itemRepository.findOne({ item_id })
+            const user = await userRepository.findOne({ user_id })
+            const item = await itemRepository.findOne({ item_id })
 
             if (!user) {
                 throw new BadRequestException('用戶不存在')
@@ -269,8 +276,12 @@ export class UserService {
 
             item.items_in_stock -= amount
 
-            await this.userRepository.save(user)
-            await this.itemRepository.save(item)
+            await userRepository.save(user)
+            await itemRepository.save(item).then(null, () => {
+                throw new ConflictException(
+                    'could not serialize access due to concurrent update'
+                )
+            })
 
             return
         } catch (err) {
@@ -278,11 +289,16 @@ export class UserService {
         }
     }
 
-    async removeItem(param: UserRemoveItemDto) {
+    @Transaction({ isolation: 'SERIALIZABLE' })
+    async removeItem(
+        param: UserRemoveItemDto,
+        @TransactionRepository(UserEntity) userRepository?: Repository<User>,
+        @TransactionRepository(ItemEntity) itemRepository?: Repository<Item>
+    ) {
         try {
             const { user_id, item_id } = param
-            const user = await this.userRepository.findOne({ user_id })
-            const item = await this.itemRepository.findOne({ item_id })
+            const user = await userRepository.findOne({ user_id })
+            const item = await itemRepository.findOne({ item_id })
 
             if (!user) {
                 throw new BadRequestException('用戶不存在')
@@ -303,8 +319,12 @@ export class UserService {
             // 補回庫存
             item.items_in_stock += removeItem.amount
 
-            await this.userRepository.save(user)
-            await this.itemRepository.save(item)
+            await userRepository.save(user)
+            await itemRepository.save(item).then(null, () => {
+                throw new ConflictException(
+                    'could not serialize access due to concurrent update'
+                )
+            })
 
             return
         } catch (err) {
@@ -364,7 +384,9 @@ export class UserService {
                 throw new BadRequestException('用戶不存在')
             }
 
-            return await this.userRepository.remove(user)
+            await this.userRepository.remove(user)
+
+            return
         } catch (err) {
             return err
         }

@@ -47,7 +47,9 @@ export class ItemService {
             item.price = param.price
             item.items_in_stock = param.items_in_stock
 
-            return await this.itemRepository.save(item)
+            await this.itemRepository.save(item)
+
+            return
         } catch (err) {
             return err
         }
@@ -65,7 +67,9 @@ export class ItemService {
             item.price = price
             item.items_in_stock = items_in_stock
 
-            return await this.itemRepository.save(item)
+            await this.itemRepository.save(item)
+
+            return
         } catch (err) {
             return err
         }
@@ -79,7 +83,9 @@ export class ItemService {
                 throw new BadRequestException('商品不存在')
             }
 
-            return await this.itemRepository.remove(item)
+            await this.itemRepository.remove(item)
+
+            return
         } catch (err) {
             return err
         }
